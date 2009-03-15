@@ -55,9 +55,11 @@ def del_comment(request, ID):
     if request.user.is_superuser:
         commentdel = Comment.objects.get(id=int(ID))
         contentdel = content.objects.get(comment=commentdel)
+        base.update({'message': 'Комментарий ID: %s удалён.' % commentdel.id})
+        authrequest(request)
         contentdel.comment.remove(commentdel)
         commentdel.delete()
-        return render_to_response('base_simple.html', {'message':'Комментарий ID: %s с текстом %s успешно удалён.'})
+        return render_to_response('base_simple.html', base)
     else:
         raise Http404
 
